@@ -19,8 +19,8 @@ var twoSum = function(nums, target) {
 
 
 /*
-time complexity:
-space complexity:
+time complexity: O(n) : loop
+space complexity: O(n) : object
 pseudo code: 
 1. create object(numbers) to compare value
 2. loop through (nums) array
