@@ -5,27 +5,30 @@
  * @return {number}
  */
 var carFleet = function(target, position, speed) {
-    const coordinates = getCoordinates(target, position, speed);
+    let len = position.length;
+    let map = new Map(), res = 0, lastTime = -1 
     
-    return searchDescending(coordinates);
-};
-
-var getCoordinates = (target, position, speed) => position
-    .map((_position, index) => [_position, speed[index]])
-    .sort(([aPosition], [bPosition]) => bPosition - aPosition)
-    .map(([_position, _speed]) => (target - _position) / _speed);
-
-var searchDescending = (coordinates, previous = 0, fleets = 0) => {
-    for (const coordinate of coordinates){
-        const isPreviousLess = previous < coordinate 
-        if (!isPreviousLess) continue 
-        
-        previous = coordinate
-        fleets++
+    // store car position and its speed
+    for (let i = 0; i < len; i++){
+        map.set(position[i], speed[i]);
     }
-    return fleets;
-}
-
+    
+    // sort cars w their position, w first car being closest car to target
+    const sortedPos = [...map.keys()].sort((a, b) => b - a);
+    
+    for (let i = 0; i < len; i++){
+        let time = (target - sortedPos[i]) / map.get(sortedPos[i]);
+        
+                // case 1: if our curr car is fast and takes even less time to reach target then our last car, they will be merged
+        // case 2: our current car takes more time to reach target, it cant merge with the last car it has to be a new fleet
+        
+        if (time > lastTime){
+            res++;
+            lastTime = time;
+        }
+    }
+    return res;
+};
 
 
 
